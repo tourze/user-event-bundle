@@ -1,9 +1,10 @@
 <?php
 
-namespace Tourze\UserEventBundle\DependencyInjection;
+namespace Tourze\UserEventBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Tourze\UserEventBundle\DependencyInjection\CommonTrait;
 use Tourze\UserEventBundle\Service\EventCollector;
 
 /**
