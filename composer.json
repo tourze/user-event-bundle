@@ -11,7 +11,7 @@
     "symfony/framework-bundle": "^6.4",
     "symfony/security-core": "^6.4",
     "symfony/event-dispatcher-contracts": "^2.5 | ^3",
-    "tourze/enum-extra": "^0.0.4"
+    "tourze/enum-extra": "^0.0.5"
   },
   "autoload": {
     "psr-4": {
