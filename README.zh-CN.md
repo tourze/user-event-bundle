@@ -3,26 +3,26 @@
 [![Latest Version](https://img.shields.io/packagist/v/tourze/user-event-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/user-event-bundle)
 [![License](https://img.shields.io/github/license/tourze/user-event-bundle.svg?style=flat-square)](https://github.com/tourze/user-event-bundle/blob/main/LICENSE)
 
-A Symfony bundle for managing user interaction events with flexible and extensible features.
+这是一个用于管理用户交互事件的 Symfony Bundle。它提供了一种灵活、可扩展的方式来处理用户之间的交互。
 
 [English](README.md) | [中文](README.zh-CN.md)
 
-## Features
+## 功能特性
 
-- Automatic collection and management of user interaction events
-- Extendable event base class
-- Context information support
-- Easy integration with existing Symfony applications
+- 自动收集和管理用户交互事件
+- 提供可扩展的事件基类
+- 支持上下文信息传递
+- 易于集成到现有的 Symfony 应用程序中
 
-## Installation
+## 安装
 
 ```bash
 composer require tourze/user-event-bundle
 ```
 
-## Quick Start
+## 快速开始
 
-Add the bundle to your `config/bundles.php`:
+在您的 `config/bundles.php` 文件中添加：
 
 ```php
 <?php
@@ -33,16 +33,16 @@ return [
 ];
 ```
 
-Configure the bundle in `config/packages/tourze_user_event.yaml`:
+在 `config/packages/tourze_user_event.yaml` 中添加配置：
 
 ```yaml
 tourze_user_event:
-    use_lookup: true  # Optional, defaults to true
+    use_lookup: true  # 可选，默认为 true
 ```
 
-## Usage
+## 使用方法
 
-### Creating Custom Events
+### 创建自定义事件
 
 ```php
 <?php
@@ -55,12 +55,12 @@ class UserMessageEvent extends UserInteractionEvent
 {
     public static function getTitle(): string
     {
-        return 'User Message Event';
+        return '用户消息事件';
     }
 }
 ```
 
-### Using the Event Finder
+### 使用事件查找器
 
 ```php
 <?php
@@ -86,12 +86,12 @@ class EventController extends AbstractController
 }
 ```
 
-## Testing
+## 测试
 
 ```bash
 ./vendor/bin/phpunit packages/user-event-bundle/tests
 ```
 
-## License
+## 许可证
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
+该项目基于 MIT 许可证。详情请查看 [License File](LICENSE) 文件。 

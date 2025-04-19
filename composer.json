@@ -18,6 +18,11 @@
       "Tourze\\UserEventBundle\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tourze\\UserEventBundle\\Tests\\": "tests"
+    }
+  },
   "require-dev": {
     "phpstan/phpstan": "^2.1"
   },
