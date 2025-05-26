@@ -20,26 +20,6 @@
 composer require tourze/user-event-bundle
 ```
 
-## 快速开始
-
-在您的 `config/bundles.php` 文件中添加：
-
-```php
-<?php
-
-return [
-    // ...
-    Tourze\UserEventBundle\UserEventBundle::class => ['all' => true],
-];
-```
-
-在 `config/packages/tourze_user_event.yaml` 中添加配置：
-
-```yaml
-tourze_user_event:
-    use_lookup: true  # 可选，默认为 true
-```
-
 ## 使用方法
 
 ### 创建自定义事件

@@ -20,26 +20,6 @@ A Symfony bundle for managing user interaction events with flexible and extensib
 composer require tourze/user-event-bundle
 ```
 
-## Quick Start
-
-Add the bundle to your `config/bundles.php`:
-
-```php
-<?php
-
-return [
-    // ...
-    Tourze\UserEventBundle\UserEventBundle::class => ['all' => true],
-];
-```
-
-Configure the bundle in `config/packages/tourze_user_event.yaml`:
-
-```yaml
-tourze_user_event:
-    use_lookup: true  # Optional, defaults to true
-```
-
 ## Usage
 
 ### Creating Custom Events
