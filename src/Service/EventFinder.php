@@ -19,12 +19,12 @@ class EventFinder implements SelectDataFetcher
     public function genSelectData(): iterable
     {
         foreach ($this->eventCollector->getEventClasses() as $name) {
-            /** @var UserInteractionEvent $name */
+            /** @var class-string<UserInteractionEvent> $name */
             $label = $name::getTitle() ?: $name;
             yield [
                 'label' => $label,
                 'text' => $label,
-                'value' => $name,
+                'value' => $name, // $name 是类名字符串
                 'name' => $name,
             ];
         }

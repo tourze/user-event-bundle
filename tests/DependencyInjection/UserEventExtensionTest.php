@@ -37,6 +37,9 @@ class UserEventExtensionTest extends TestCase
 
     public function testLoad(): void
     {
+        // 验证 extension 是否正确实例化
+        $this->assertInstanceOf(UserEventExtension::class, $this->extension);
+        
         // 我们不能直接调用 load 方法，因为它依赖于 services.yaml 文件
         // 相反，我们测试服务是否在 container 中正确注册
 
