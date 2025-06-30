@@ -2,52 +2,11 @@
 
 namespace Tourze\UserEventBundle\Tests\Event;
 
+require_once __DIR__ . '/TestHelpers.php';
+
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\UserEventBundle\Event\UserInteractionEvent;
-
-/**
- * 创建一个用户对象实现
- */
-class TestUser implements UserInterface
-{
-    private string $username;
-
-    public function __construct(string $username)
-    {
-        $this->username = $username;
-    }
-
-    public function getRoles(): array
-    {
-        return ['ROLE_USER'];
-    }
-
-    public function getPassword(): ?string
-    {
-        return null;
-    }
-
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    public function eraseCredentials(): void
-    {
-        // do nothing
-    }
-
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return $this->username;
-    }
-}
 
 class UserInteractionEventTest extends TestCase
 {

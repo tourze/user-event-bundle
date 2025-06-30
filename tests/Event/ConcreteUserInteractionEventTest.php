@@ -2,6 +2,8 @@
 
 namespace Tourze\UserEventBundle\Tests\Event;
 
+require_once __DIR__ . '/TestHelpers.php';
+
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tourze\UserEventBundle\Event\UserInteractionEvent;
