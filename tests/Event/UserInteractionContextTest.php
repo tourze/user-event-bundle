@@ -2,17 +2,22 @@
 
 namespace Tourze\UserEventBundle\Tests\Event;
 
-require_once __DIR__ . '/TestHelpers.php';
-
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\UserEventBundle\Event\UserInteractionContext;
 
-class UserInteractionContextTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(UserInteractionContext::class)]
+final class UserInteractionContextTest extends TestCase
 {
     private TestUserInteractionContext $context;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->context = new TestUserInteractionContext();
     }
 

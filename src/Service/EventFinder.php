@@ -21,7 +21,7 @@ class EventFinder implements SelectDataFetcher
         foreach ($this->eventCollector->getEventClasses() as $name) {
             /** @var class-string<UserInteractionEvent> $name */
             $title = $name::getTitle();
-            $label = $title !== '' ? $title : $name;
+            $label = '' !== $title ? $title : $name;
             yield [
                 'label' => $label,
                 'text' => $label,

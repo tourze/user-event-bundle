@@ -2,13 +2,18 @@
 
 namespace Tourze\UserEventBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Contracts\EventDispatcher\Event;
 use Tourze\UserEventBundle\DependencyInjection\Compiler\RemoveUnusedServicePass;
 use Tourze\UserEventBundle\Event\UserInteractionEvent;
 
-class RemoveUnusedServicePassTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(RemoveUnusedServicePass::class)]
+final class RemoveUnusedServicePassTest extends TestCase
 {
     private RemoveUnusedServicePass $removeUnusedServicePass;
 
@@ -25,9 +30,9 @@ class RemoveUnusedServicePassTest extends TestCase
         // 创建并注册非 UserInteractionEvent 的 Event 服务（应该被移除）
         $eventMockClass = 'MockEvent_' . uniqid();
         eval("
-            class $eventMockClass extends " . Event::class . " {
+            class {$eventMockClass} extends " . Event::class . ' {
             }
-        ");
+        ');
 
         $container->register($eventMockClass, $eventMockClass);
         $this->assertTrue($container->has($eventMockClass), '测试前应该存在服务');
@@ -47,7 +52,7 @@ class RemoveUnusedServicePassTest extends TestCase
         // 创建并注册 UserInteractionEvent 子类服务（不应该被移除）
         $uiEventMockClass = 'MockUserInteractionEvent_' . uniqid();
         eval("
-            class $uiEventMockClass extends " . UserInteractionEvent::class . " {
+            class {$uiEventMockClass} extends " . UserInteractionEvent::class . " {
                 public static function getTitle(): string {
                     return 'Test Event';
                 }
@@ -72,7 +77,7 @@ class RemoveUnusedServicePassTest extends TestCase
         // 创建并注册非 Event 类的服务（不应该被移除）
         $normalClass = 'MockNormalClass_' . uniqid();
         eval("
-            class $normalClass {
+            class {$normalClass} {
             }
         ");
 

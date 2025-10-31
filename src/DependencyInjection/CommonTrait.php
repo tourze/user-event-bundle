@@ -7,31 +7,83 @@ use Tourze\UserEventBundle\Event\UserInteractionEvent;
 
 trait CommonTrait
 {
+    /**
+     * @return iterable<string>
+     */
     public function fetchUserInteractionEvents(ContainerBuilder $container): iterable
     {
-        foreach ($container->getParameter('kernel.bundles') as $bundle) {
-            $reflection = $container->getReflectionClass($bundle);
-            $bundleDir = dirname($reflection->getFileName());
+        $bundles = $container->getParameter('kernel.bundles');
+        if (!is_array($bundles)) {
+            return;
+        }
+        foreach ($bundles as $bundle) {
+            yield from $this->getEventsFromBundle($container, $bundle);
+        }
+    }
 
-            // 扫描所有的 Event 类
-            $eventDir = $bundleDir . '/Event';
-            if (is_dir($eventDir)) {
-                $events = glob($eventDir . '/*.php');
-                foreach ($events as $event) {
-                    // 获取event的完整类名，要注意 namespace
-                    $eventClass = $reflection->getNamespaceName() . '\\Event\\' . basename($event, '.php');
-                    if (!class_exists($eventClass)) {
-                        continue;
-                    }
+    /**
+     * @return iterable<string>
+     */
+    private function getEventsFromBundle(ContainerBuilder $container, string $bundle): iterable
+    {
+        $reflection = $container->getReflectionClass($bundle);
+        if (null === $reflection) {
+            return;
+        }
 
-                    // 是否继承了 \App\Tracking\Event\UserInteractionEvent
-                    $eventReflection = $container->getReflectionClass($eventClass);
-                    if (!$eventReflection->isSubclassOf(UserInteractionEvent::class)) {
-                        continue;
-                    }
-                    yield $eventClass;
-                }
+        $fileName = $reflection->getFileName();
+        if (false === $fileName) {
+            return;
+        }
+
+        $eventDir = dirname($fileName) . '/Event';
+
+        if (!is_dir($eventDir)) {
+            return;
+        }
+
+        yield from $this->scanEventFiles($container, $eventDir, $reflection);
+    }
+
+    /**
+     * @param \ReflectionClass<object> $bundleReflection
+     * @return iterable<string>
+     */
+    private function scanEventFiles(ContainerBuilder $container, string $eventDir, \ReflectionClass $bundleReflection): iterable
+    {
+        $events = glob($eventDir . '/*.php');
+        if (false === $events) {
+            return;
+        }
+
+        foreach ($events as $eventFile) {
+            $eventClass = $this->buildEventClassName($bundleReflection, $eventFile);
+
+            if ($this->isValidUserInteractionEvent($container, $eventClass)) {
+                yield $eventClass;
             }
         }
+    }
+
+    /**
+     * @param \ReflectionClass<object> $bundleReflection
+     */
+    private function buildEventClassName(\ReflectionClass $bundleReflection, string $eventFile): string
+    {
+        return $bundleReflection->getNamespaceName() . '\Event\\' . basename($eventFile, '.php');
+    }
+
+    private function isValidUserInteractionEvent(ContainerBuilder $container, string $eventClass): bool
+    {
+        if (!class_exists($eventClass)) {
+            return false;
+        }
+
+        $eventReflection = $container->getReflectionClass($eventClass);
+        if (null === $eventReflection) {
+            return false;
+        }
+
+        return $eventReflection->isSubclassOf(UserInteractionEvent::class);
     }
 }

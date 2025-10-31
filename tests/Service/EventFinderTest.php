@@ -2,34 +2,41 @@
 
 namespace Tourze\UserEventBundle\Tests\Service;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractIntegrationTestCase;
 use Tourze\UserEventBundle\Event\UserInteractionEvent;
 use Tourze\UserEventBundle\Service\EventCollector;
 use Tourze\UserEventBundle\Service\EventFinder;
 
-class EventFinderTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(EventFinder::class)]
+#[RunTestsInSeparateProcesses]
+final class EventFinderTest extends AbstractIntegrationTestCase
 {
-    private EventCollector $eventCollector;
-    private EventFinder $eventFinder;
-
-    protected function setUp(): void
+    protected function onSetUp(): void
     {
-        // 使用真实实例而非 mock
-        $this->eventCollector = new EventCollector();
-        $this->eventFinder = new EventFinder($this->eventCollector);
     }
 
     public function testGenSelectDataWithNoEvents(): void
     {
-        // 设置空事件类列表
-        $this->eventCollector->setEventClasses([]);
+        $eventCollector = self::getService(EventCollector::class);
+        $eventFinder = self::getService(EventFinder::class);
 
-        $result = iterator_to_array($this->eventFinder->genSelectData());
+        // 设置空事件类列表
+        $eventCollector->setEventClasses([]);
+
+        $result = iterator_to_array($eventFinder->genSelectData());
         $this->assertEmpty($result);
     }
 
     public function testGenSelectDataWithEvents(): void
     {
+        $eventCollector = self::getService(EventCollector::class);
+        $eventFinder = self::getService(EventFinder::class);
+
         // 定义一个临时类用于测试
         $testEvent = new class extends UserInteractionEvent {
             public static function getTitle(): string
@@ -41,9 +48,9 @@ class EventFinderTest extends TestCase
         $testEventClass = get_class($testEvent);
 
         // 设置事件类列表
-        $this->eventCollector->setEventClasses([$testEventClass]);
+        $eventCollector->setEventClasses([$testEventClass]);
 
-        $result = iterator_to_array($this->eventFinder->genSelectData());
+        $result = iterator_to_array($eventFinder->genSelectData());
 
         $this->assertCount(1, $result);
         $this->assertSame('Test Event Title', $result[0]['label']);
@@ -54,6 +61,9 @@ class EventFinderTest extends TestCase
 
     public function testGenSelectDataWithEventHavingEmptyTitle(): void
     {
+        $eventCollector = self::getService(EventCollector::class);
+        $eventFinder = self::getService(EventFinder::class);
+
         // 创建一个没有重写getTitle方法的事件类
         $testEvent = new class extends UserInteractionEvent {
         };
@@ -61,9 +71,9 @@ class EventFinderTest extends TestCase
         $testEventClass = get_class($testEvent);
 
         // 设置事件类列表
-        $this->eventCollector->setEventClasses([$testEventClass]);
+        $eventCollector->setEventClasses([$testEventClass]);
 
-        $result = iterator_to_array($this->eventFinder->genSelectData());
+        $result = iterator_to_array($eventFinder->genSelectData());
 
         $this->assertCount(1, $result);
         $this->assertSame($testEventClass, $result[0]['label']); // 当title为空时，使用类名

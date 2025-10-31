@@ -2,51 +2,59 @@
 
 namespace Tourze\UserEventBundle\Tests\Service;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractIntegrationTestCase;
 use Tourze\UserEventBundle\Service\EventCollector;
 
-class EventCollectorTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(EventCollector::class)]
+#[RunTestsInSeparateProcesses]
+final class EventCollectorTest extends AbstractIntegrationTestCase
 {
-    private EventCollector $collector;
-
-    protected function setUp(): void
+    protected function onSetUp(): void
     {
-        $this->collector = new EventCollector();
     }
 
     public function testInitialStateIsEmptyArray(): void
     {
-        $this->assertSame([], $this->collector->getEventClasses());
+        $collector = self::getService(EventCollector::class);
+        $this->assertSame([], $collector->getEventClasses());
     }
 
     public function testAddEventClass(): void
     {
+        $collector = self::getService(EventCollector::class);
         $eventClass = 'TestEvent';
-        $this->collector->addEventClass($eventClass);
+        $collector->addEventClass($eventClass);
 
-        $this->assertContains($eventClass, $this->collector->getEventClasses());
-        $this->assertCount(1, $this->collector->getEventClasses());
+        $this->assertContains($eventClass, $collector->getEventClasses());
+        $this->assertCount(1, $collector->getEventClasses());
     }
 
     public function testAddMultipleEventClasses(): void
     {
+        $collector = self::getService(EventCollector::class);
         $eventClass1 = 'TestEvent1';
         $eventClass2 = 'TestEvent2';
 
-        $this->collector->addEventClass($eventClass1);
-        $this->collector->addEventClass($eventClass2);
+        $collector->addEventClass($eventClass1);
+        $collector->addEventClass($eventClass2);
 
-        $this->assertContains($eventClass1, $this->collector->getEventClasses());
-        $this->assertContains($eventClass2, $this->collector->getEventClasses());
-        $this->assertCount(2, $this->collector->getEventClasses());
+        $this->assertContains($eventClass1, $collector->getEventClasses());
+        $this->assertContains($eventClass2, $collector->getEventClasses());
+        $this->assertCount(2, $collector->getEventClasses());
     }
 
     public function testSetEventClasses(): void
     {
+        $collector = self::getService(EventCollector::class);
         $eventClasses = ['TestEvent1', 'TestEvent2'];
 
-        $this->collector->setEventClasses($eventClasses);
+        $collector->setEventClasses($eventClasses);
 
-        $this->assertSame($eventClasses, $this->collector->getEventClasses());
+        $this->assertSame($eventClasses, $collector->getEventClasses());
     }
 }

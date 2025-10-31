@@ -2,20 +2,27 @@
 
 namespace Tourze\UserEventBundle\Tests\Event;
 
-require_once __DIR__ . '/TestHelpers.php';
-
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Tourze\PHPUnitSymfonyUnitTest\AbstractEventTestCase;
 use Tourze\UserEventBundle\Event\UserInteractionEvent;
 
-class UserInteractionEventTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(UserInteractionEvent::class)]
+final class UserInteractionEventTest extends AbstractEventTestCase
 {
     private UserInteractionEvent $event;
+
     private UserInterface $sender;
+
     private UserInterface $receiver;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         // 创建一个匿名子类的实例，因为UserInteractionEvent是抽象类
         $this->event = new class extends UserInteractionEvent {
         };

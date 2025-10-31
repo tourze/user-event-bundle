@@ -2,20 +2,27 @@
 
 namespace Tourze\UserEventBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\FileLocatorFileNotFoundException;
+use Tourze\PHPUnitSymfonyUnitTest\AbstractDependencyInjectionExtensionTestCase;
 use Tourze\UserEventBundle\DependencyInjection\UserEventExtension;
 use Tourze\UserEventBundle\Service\EventCollector;
 use Tourze\UserEventBundle\Service\EventFinder;
 
-class UserEventExtensionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(UserEventExtension::class)]
+final class UserEventExtensionTest extends AbstractDependencyInjectionExtensionTestCase
 {
     private UserEventExtension $extension;
+
     private ContainerBuilder $container;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->extension = new UserEventExtension();
         $this->container = new ContainerBuilder();
 
@@ -27,19 +34,21 @@ class UserEventExtensionTest extends TestCase
     {
         // 注册 EventCollector 服务
         $this->container->register(EventCollector::class)
-            ->setPublic(true);
+            ->setPublic(true)
+        ;
 
         // 注册 EventFinder 服务
         $this->container->register(EventFinder::class)
             ->setArgument('$eventCollector', $this->container->getDefinition(EventCollector::class))
-            ->setPublic(true);
+            ->setPublic(true)
+        ;
     }
 
     public function testLoad(): void
     {
         // 验证 extension 是否正确实例化
         $this->assertInstanceOf(UserEventExtension::class, $this->extension);
-        
+
         // 我们不能直接调用 load 方法，因为它依赖于 services.yaml 文件
         // 相反，我们测试服务是否在 container 中正确注册
 

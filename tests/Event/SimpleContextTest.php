@@ -2,31 +2,17 @@
 
 namespace Tourze\UserEventBundle\Tests\Event;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\UserEventBundle\Event\UserInteractionContext;
 
 /**
- * 简单的上下文实现
- */
-class SimpleContext implements UserInteractionContext
-{
-    private array $contextData = [];
-
-    public function getContext(): array
-    {
-        return $this->contextData;
-    }
-
-    public function addContextData(string $key, mixed $value): void
-    {
-        $this->contextData[$key] = $value;
-    }
-}
-
-/**
  * 测试上下文实现
+ *
+ * @internal
  */
-class SimpleContextTest extends TestCase
+#[CoversClass(SimpleContext::class)]
+final class SimpleContextTest extends TestCase
 {
     private SimpleContext $context;
 
